@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vizsga Eredmények Analízis</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <!-- layout fixek (hogy biztosan működjön akkor is, ha a style.css nincs frissítve) -->
+  <style>
+    .controls-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      margin: 10px 0 14px 0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.45);
+    }
+    .control-group{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .control-label{
+      font-weight:600;
+      margin-right: 4px;
+    }
+    .control-group label{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .toggle{
+      font-weight:600;
+    }
+    .chart-center{
+      display:flex;
+      justify-content:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Vizsga Eredmények Analízis</h1>
+      <p class="subtitle">Tanulói teljesítmény elemzése ~20,000 hallgató adatai alapján</p>
+    </header>
+
+    <!-- Gender eloszlás -->
+    <div class="chart-container">
+      <div class="chart-title">Nemek szerinti eloszlás</div>
+      <div class="chart-description">
+        Az adatbázisban szereplő hallgatók nemi megoszlása
+      </div>
+      <div id="vis1"></div>
+      <div class="insight">
+        <h3>📊 Mit mutat a diagram?</h3>
+        <p>Ez a fánkdiagram a hallgatók nemi megoszlását ábrázolja. Láthatjuk, hogy mindhárom kategória (férfi, nő,
+          egyéb) körülbelül egyformán van képviselve az adatbázisban, mindegyik kb. 33%-ot tesz ki.</p>
+          <br>
+        <h3>🔍 Mit tanulhatunk ebből?</h3>
+        <p><strong>Megbízható adat:</strong> Az egyenletes eloszlás azt jelenti, hogy az eredményeink valóban minden
+          hallgatói csoportra vonatkoznak, nem csak egy részükre. Ez fontos, mert így biztos lehetünk benne, hogy a
+          később látott összefüggések és minázatok átfogó képet mutatnak.</p>
+      </div>
+    </div>
+
+    <!-- Exam Score eloszlás -->
+    <div class="chart-container">
+      <div class="chart-title">Vizsgaeredmények eloszlása</div>
+      <div class="chart-description">
+        A hallgatók vizsgapontszámainak gyakorisági eloszlása
+      </div>
+      <div id="vis2"></div>
+      <div class="insight">
+        <h3>📊 Mit mutat a diagram?</h3>
+        <p>Ez a hisztogram a vizsgaeredmények eloszlását mutatja. Az oszlopok színe jelzi a teljesítmény szintjét: a
+          rózsaszínes oszlopok a gyengébb eredményeket (0-50 pont), a bézs szín a közepes tartományt (50-70 pont), míg a
+          zöld a jó teljesítményt (70-100 pont) jelzi.</p>
+          <br>
+        <h3>🔍 Mit tanulhatunk ebből?</h3>
+        <p><strong>A legtöbb hallgató a középen található:</strong> Az adatok azt mutatják, hogy a hallgatók jelentős
+          része az 50-70 pontos tartományban van.</p>
+        <p><strong>Az eloszlás mintája:</strong> Látható, hogy viszonylag kevesen vannak az alsó tartományban (0-50 pont
+          között), és a magasabb pontokat elérők száma is korlátozott. A legtöbb hallgató eredménye egy közepes szinten
+          koncentrálódik, ami egy <strong> tipikus eloszlási mintát </strong> mutat az oktatásban.</p>
+        <p><strong>Érdekes megfigyelés:</strong> A színkódolás segítségével gyorsan látható, hogy melyik
+          teljesítményszint milyen népességű. Ez lehetové teszi, hogy azonnal átfogjúk, hol helyezkednek el a hallgatók
+          a teljesítményskalán.</p>
+      </div>
+    </div>
+
+    <!-- Study Method vs Exam Score -->
+    <div class="chart-container">
+      <div class="chart-title">Tanulási módszerek hatékonysága</div>
+      <div class="chart-description">
+        Átlagos vizsgaeredmények tanulási módszer szerint
+      </div>
+      <div id="vis3"></div>
+      <div class="insight">
+        <h3>📊 Mit mutat a diagram?</h3>
+        <p>Ez az oszlopdiagram az öt fő tanulási módszer átlagos vizsgaeredményeit hasonlítja össze. Minden oszlop egy
+          módszert képvisel (coaching, group study, mixed, online videos, self-study), és az oszlop magassága mutatja,
+          hogy az adott módszerrel tanuló hallgatók átlagosan hány pontot értek el.</p>
+          <br>
+        <h3>🔍 Mit tanulhatunk ebből?</h3>
+        <p><strong>Némi eltérés látható:</strong> Az átlagos eredmények között kisebb-nagyobb különbségek vannak a
+          tanulási módszerek között, de ezek nem feltétlenül drámaiak. Minden módszerrel találunk sikeres és kevésbé
+          sikeres hallgatókat is.</p>
+        <p><strong>Nem garancia semmilyen módszer:</strong> Az adatok azt mutatják, hogy egyik tanulási módszer sem
+          vezet automatikusan jó vagy rossz eredményhez. </p>
+        <p><strong>Mintázat az adatokban:</strong> Látható, hogy az irányított, társas tanulási formák (ahol van
+          coaching vagy csoportmunka) általában jobb eredményeket hoztak, mint azok a módszerek, ahol a hallgató egyedül tanult.</p>
+      </div>
+    </div>
+
+    <!-- 4. Chart (javított layout + HTML kontrollok) -->
+    <div class="chart-container">
+      <div class="chart-title">Alvásórák és vizsgaeredmény kapcsolata</div>
+      <div class="chart-description">
+        Pontdiagram: x = alvásórák, y = vizsgaeredmény; a szín az alvás minőségét mutatja.
+        A kapcsolóval a trendvonalak ki/be kapcsolhatók, a rádiógombbal pedig szűrhetsz vizsga nehézség szerint.
+      </div>
+
+      <div class="controls-row">
+        <div class="control-group">
+          <span class="control-label">Vizsga nehézség:</span>
+          <label><input type="radio" name="difficulty" value="All" checked> Összes</label>
+          <label><input type="radio" name="difficulty" value="easy"> Könnyű</label>
+          <label><input type="radio" name="difficulty" value="moderate"> Közepes</label>
+          <label><input type="radio" name="difficulty" value="hard"> Nehéz</label>
+        </div>
+
+        <div class="control-group">
+          <label class="toggle">
+            <input type="checkbox" id="showTrend" checked>
+            Trendvonalak
+          </label>
+        </div>
+      </div>
+
+      <div class="chart-center">
+        <div id="vis4"></div>
+      </div>
+
+      <div class="insight">
+        <h3>📊 Mit mutat a diagram?</h3>
+        <p>
+          Ez a pontdiagram azt ábrázolja, hogyan viszonyul egymáshoz a
+          <strong>napi alvásidő</strong> (x tengely) és a
+          <strong>vizsgaeredmény</strong> (y tengely) a hallgatók körében.
+        </p>
+      
+        <p>
+          Minden pont egy hallgató egy megfigyelése.
+          A diagramon jól látható, hogy a pontok erősen <em>szétszórtak</em>:
+          ugyanannál az alvásóránál is sokféle vizsgaeredmény fordul elő.
+        </p>
+      
+        <p>
+          Ez arra utal, hogy az alvás önmagában
+          nem az egyetlen tényező, amely a teljesítményt meghatározza.
+          Ugyanakkor a simított trendvonalak segítenek meglátni azt az
+          <em>átlagos irányt</em>, amely a zajos egyéni eltérések mögött kirajzolódik.
+        </p>
+
+        <br>
+      
+        <h3>🔍 Mit tanulhatunk ebből?</h3>
+        <p>
+          A trendvonalak bekapcsolásával világosabban összehasonlítható,
+          hogy az eltérő alvásminőség mellett
+          hogyan alakul átlagosan a vizsgaeredmény az alvásórák függvényében.
+        </p>
+      
+        <p>
+          <strong>1) Alvásminőség hatása:</strong> Az ábrán következetesen megfigyelhető, hogy a
+          jobb alvásminőséghez magasabb átlagos vizsgaeredmények
+          társulnak, függetlenül attól, hogy a vizsga könnyű, közepes vagy nehéz.
+          Ez a hatás nem szélsőséges, de stabilan jelen van.
+        </p>
+      
+        <p>
+          <strong>2) Vizsganehézség hatása:</strong>A vizsganehézség szerinti szűrés azt is megmutatja, hogy
+          nehezebb vizsgák esetén a pontok szórása nagyobb,
+          azaz a teljesítmény változékonyabb.
+          Ennek ellenére a jó alvásminőség előnye ilyenkor is megmarad.
+        </p>
+      
+        <p>
+          <strong>Végső Következtetés: </strong>Összességében a diagram azt sugallja, hogy a megfelelő mennyiségű és
+          jó minőségű alvás <strong>nem garantál</strong> kiemelkedő eredményt,
+          de <strong>javítja annak valószínűségét</strong>,
+          különösen összetettebb, nagyobb terhelést jelentő vizsgák esetén.
+        </p>
+      </div>
+      
+    </div>
+
+    <!-- 5. Chart: Bubble (Attendance – Study Time – Exam Score) -->
+<div class="chart-container">
+  <div class="chart-title">Jelenlét, tanulási idő és vizsgaeredmény kapcsolata</div>
+  <div class="chart-description">
+    A buborékok csoportosított hallgatói mintákat mutatnak: x = órai jelenlét (%), y = tanulási idő (óra).
+    A buborék <b>színe</b> az adott csoport <b>átlagos vizsgaeredményét</b> jelzi, a buborék <b>mérete</b> pedig azt,
+    hány hallgató tartozik oda. A rádiógombokkal vizsga nehézség szerint szűrhetsz.
+  </div>
+
+  <div class="controls-row">
+    <div class="control-group">
+      <span class="control-label">Vizsga nehézség:</span>
+      <label><input type="radio" name="difficulty5" value="All" checked> Összes</label>
+      <label><input type="radio" name="difficulty5" value="easy"> Könnyű</label>
+      <label><input type="radio" name="difficulty5" value="moderate"> Közepes</label>
+      <label><input type="radio" name="difficulty5" value="hard"> Nehéz</label>
+    </div>
+  </div>
+
+  <div class="chart-center">
+    <div id="vis5"></div>
+  </div>
+
+  <div class="insight">
+    <h3>📌 Hogyan olvasd a diagramot?</h3>
+    <p>
+      A függőleges vonal (≈ 80% jelenlét) és a vízszintes vonal (≈ 5 óra tanulás) két “küszöböt” jelöl:
+      alacsony vs. magas jelenlét, illetve kevesebb vs. több tanulás. Így gyorsan összehasonlíthatók a négy
+      negyedben megjelenő minták.
+    </p>
+
+    <br>
+
+    <h3>🔍 Mit érdemes megfigyelni?</h3>
+    <p>
+      <b>1) Tanulási idő hatása:</b> felfelé haladva (több tanulás) jellemzően egyre “zöldebb” a szín,
+      vagyis magasabb az átlagpontszám – ez akkor is látszik, ha a jelenlét nem kiugróan magas.
+      <br>
+      <b>2) Jelenlét hatása:</b> jobbra haladva (magasabb jelenlét) szintén javul a teljesítmény,
+      de főleg akkor, ha a tanulási idő is legalább közepes.
+      <br>
+      <b>3) Kombináció a legerősebb:</b> a jobb felső negyed (magas jelenlét + több tanulás) adja a legjobb
+      átlagokat – itt a legerősebb a “magas teljesítmény” mintázat.
+      <br>
+      <b>4) Szűrés szerepe:</b> nehezebb vizsgánál általában “drágább” a jó eredmény:
+      több tanulás (és/vagy stabil jelenlét) kell ugyanahhoz a szinthez, míg könnyű vizsgánál a kedvező
+      eredmények már közepes erőfeszítés mellett is gyakrabban megjelennek.
+      <br>
+      <b>5) Jelenlét vs. tanulás:</b> A jobb alsó (magas jelenlét, kevés tanulás) és a bal felső negyed
+      (alacsonyabb jelenlét, több tanulás) összehasonlítása azt mutatja, hogy a több tanulás gyakrabban jár
+      <strong> jobb eredménnyel, mint a puszta jelenlét. </strong> Ez arra utal, hogy a tanulási idő hatása erősebb,
+      <strong> bár a legjobb pontszámok a magas jelenlét és a sok tanulás kombinációjánál jelennek meg. </strong>
+
+    </p>
+  </div>
+</div>
+
+    <script type="text/javascript">
+      const dataUrl = 'Exam_Score_Prediction.csv';
+
+      // 1. Donut
+      const spec1 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "background": "#F2E7DD",
+        "data": { "url": dataUrl, "format": { "type": "csv" } },
+        "transform": [
+          { "aggregate": [{ "op": "count", "as": "count" }], "groupby": ["gender"] },
+          { "window": [{ "op": "sum", "field": "count", "as": "total" }], "frame": [null, null] },
+          { "calculate": "datum.count / datum.total * 100", "as": "percentage" },
+          { "calculate": "format(datum.percentage, '.1f') + '%'", "as": "label" }
+        ],
+        "layer": [
+          {
+            "mark": { "type": "arc", "innerRadius": 60, "outerRadius": 140 },
+            "encoding": {
+              "theta": { "field": "count", "type": "quantitative" },
+              "color": {
+                "field": "gender",
+                "type": "nominal",
+                "scale": { "domain": ["male", "female", "other"], "range": ["#7A958F", "#CA8E82", "#A75F37"] },
+                "legend": { "title": "Nem", "labelFontSize": 12, "titleFontSize": 14 }
+              },
+              "tooltip": [
+                { "field": "gender", "type": "nominal", "title": "Nem" },
+                { "field": "count", "type": "quantitative", "title": "Hallgatók száma" },
+                { "field": "percentage", "type": "quantitative", "title": "Százalék", "format": ".1f" }
+              ]
+            }
+          },
+          {
+            "mark": { "type": "text", "radius": 100, "fontSize": 16, "fontWeight": "bold", "color": "#292421" },
+            "encoding": {
+              "theta": { "field": "count", "type": "quantitative", "stack": true },
+              "text": { "field": "label", "type": "nominal" }
+            }
+          }
+        ],
+        "width": 300,
+        "height": 300
+      };
+
+      // 2. Histogram
+      const spec2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "background": "#F2E7DD",
+        "data": { "url": dataUrl, "format": { "type": "csv" } },
+        "transform": [
+          { "bin": { "maxbins": 30 }, "field": "exam_score", "as": ["bin_start", "bin_end"] },
+          { "calculate": "(datum.bin_start + datum.bin_end) / 2", "as": "bin_mid" }
+        ],
+        "mark": "bar",
+        "encoding": {
+          "x": {
+            "field": "bin_start",
+            "bin": "binned",
+            "title": "Vizsgaeredmény",
+            "axis": { "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "x2": { "field": "bin_end" },
+          "y": {
+            "aggregate": "count",
+            "title": "Hallgatók száma",
+            "axis": { "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "color": {
+            "field": "bin_mid",
+            "type": "quantitative",
+            "scale": { "domain": [0, 50, 70, 100], "range": ["#CA8E82", "#D9B99F", "#7A958F", "#7A958F"] },
+            "legend": { "title": "Teljesítmény", "titleFontSize": 12, "labelFontSize": 11 }
+          },
+          "tooltip": [
+            { "field": "bin_start", "title": "Pontszám (tól)", "format": ".1f" },
+            { "field": "bin_end", "title": "Pontszám (ig)", "format": ".1f" },
+            { "aggregate": "count", "title": "Hallgatók száma" }
+          ]
+        },
+        "width": 600,
+        "height": 300
+      };
+
+      // 3. Bar chart
+      const spec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "background": "#F2E7DD",
+        "data": { "url": dataUrl, "format": { "type": "csv" } },
+        "mark": "bar",
+        "encoding": {
+          "x": {
+            "field": "study_method",
+            "type": "nominal",
+            "title": "Tanulási módszer",
+            "axis": { "labelAngle": -45, "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "y": {
+            "aggregate": "mean",
+            "field": "exam_score",
+            "type": "quantitative",
+            "title": "Átlagos vizsgaeredmény",
+            "scale": { "domain": [0, 100] },
+            "axis": { "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "color": {
+            "field": "study_method",
+            "type": "nominal",
+            "scale": { "range": ["#A75F37", "#CA8E82", "#D9B99F", "#7A958F", "#F2D6CE"] },
+            "legend": null
+          },
+          "tooltip": [
+            { "field": "study_method", "title": "Tanulási módszer" },
+            { "aggregate": "mean", "field": "exam_score", "title": "Átlagos pontszám", "format": ".2f" },
+            { "aggregate": "count", "title": "Hallgatók száma" }
+          ]
+        },
+        "width": 500,
+        "height": 300
+      };
+
+      vegaEmbed('#vis1', spec1, { actions: false });
+      vegaEmbed('#vis2', spec2, { actions: false });
+      vegaEmbed('#vis3', spec3, { actions: false });
+
+      // 4. Scatter (interactive) – HTML kontrollokkal
+      let view4 = null;
+
+      fetch('sleep-scatter-interactive.json')
+        .then(r => r.json())
+        .then(spec4 => vegaEmbed('#vis4', spec4, { actions: false }))
+        .then(res => {
+          view4 = res.view;
+
+          // init: a spec alapértékeivel összhangban
+          view4.signal('difficulty', 'All').runAsync();
+          view4.signal('showTrend', true).runAsync();
+
+          document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+              if (!view4) return;
+              view4.signal('difficulty', e.target.value).runAsync();
+            });
+          });
+
+          document.getElementById('showTrend').addEventListener('change', (e) => {
+            if (!view4) return;
+            view4.signal('showTrend', e.target.checked).runAsync();
+          });
+        })
+        .catch(console.error);
+
+    
+  // 5. Bubble chart 
+  let view5 = null;
+
+fetch('attendance-bubble.json')
+  .then(r => r.json())
+  .then(spec5 => vegaEmbed('#vis5', spec5, { actions: false }))
+  .then(res => {
+    view5 = res.view;
+    view5.signal('difficulty5', 'All').runAsync();
+
+    document.querySelectorAll('input[name="difficulty5"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (!view5) return;
+        view5.signal('difficulty5', e.target.value).runAsync();
+      });
+    });
+  })
+  .catch(console.error);
+
+    
+    </script>
+
+    <footer>
+      <p>© 2026 Vizsga Eredmények Analízis | Business Intelligence Csoportos Projekt</p>
+    </footer>
+  </div>
+</body>
+
+</html>

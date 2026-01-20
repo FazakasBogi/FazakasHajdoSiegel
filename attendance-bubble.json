@@ -1,0 +1,138 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#F2E7DD",
+    "data": { "url": "Exam_Score_Prediction.csv", "format": { "type": "csv" } },
+  
+    "params": [
+      { "name": "difficulty5", "value": "All" }
+    ],
+  
+    "transform": [
+      {
+        "filter": "isValid(datum.class_attendance) && isValid(datum.study_hours) && isValid(datum.exam_score) && isValid(datum.exam_difficulty)"
+      },
+      { "filter": "difficulty5 === 'All' || datum.exam_difficulty === difficulty5" },
+  
+      { "bin": { "maxbins": 12 }, "field": "class_attendance", "as": ["att_start", "att_end"] },
+      { "bin": { "step": 1 }, "field": "study_hours", "as": ["study_start", "study_end"] },
+  
+      {
+        "aggregate": [
+          { "op": "mean", "field": "exam_score", "as": "avg_score" },
+          { "op": "count", "as": "n" }
+        ],
+        "groupby": ["att_start", "att_end", "study_start", "study_end"]
+      },
+  
+      { "filter": "datum.n >= 1" },
+  
+      { "calculate": "(datum.att_start + datum.att_end) / 2", "as": "att_mid" },
+      { "calculate": "(datum.study_start + datum.study_end) / 2", "as": "study_mid" },
+
+      {
+        "joinaggregate": [
+          { "op": "min", "field": "n", "as": "min_n" },
+          { "op": "max", "field": "n", "as": "max_n" }
+        ]
+      },
+      { "calculate": "max(datum.min_n, 1)", "as": "min_n_safe" }
+      
+    ],
+  
+    "layer": [
+        {
+            "mark": { "type": "rule", "color": "#7A958F", "opacity": 0.06, "strokeWidth": 1 },
+            "encoding": {
+              "x": { "datum": 80 }
+            }
+          },
+          {
+            "mark": { "type": "rule", "color": "#7A958F", "opacity": 0.06, "strokeWidth": 1 },
+            "encoding": {
+              "y": { "datum": 5 }
+            }
+          },
+          
+          
+          
+  
+      {
+        "mark": { "type": "circle", "opacity": 0.85 },
+  
+        "encoding": {
+          "x": {
+        "field": "att_mid",
+        "type": "quantitative",
+        "title": "Órai jelenlét (%)",
+        "scale": { "zero": false, "padding": 10 },
+        "axis": {
+        "values": [40,45,50,55,60,65,70,75,80,85,90,95,100],
+        "grid": true,
+        "gridOpacity": 0.25,
+        "gridColor": "#CFC8BF",
+        "gridWidth": 1,
+        "labelFlush": false,
+        "labelFontSize": 11,
+        "titleFontSize": 13
+        }
+    },
+
+          "y": {
+            "field": "study_mid",
+            "type": "quantitative",
+            "title": "Tanulási idő (óra)",
+            "scale": { "domain": [0, 8] },
+            "axis": {
+              "values": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+              "labelFontSize": 11,
+              "titleFontSize": 13,
+              "grid": true,
+              "gridOpacity": 0.25,
+              "gridColor": "#CFC8BF",
+              "gridWidth": 1
+
+            }
+          },
+  
+          "size": {
+  "field": "n",
+  "type": "quantitative",
+  "title": "Hallgatók száma",
+  "scale": {
+    "domain": {
+      "data": "data_0",
+      "fields": ["min_n_safe", "max_n"]
+    },
+    "range": [40, 900]
+  },
+  "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+},
+
+  
+          "color": {
+            "field": "avg_score",
+            "type": "quantitative",
+            "title": "Átlagos vizsgaeredmény",
+            "scale": {
+              "domain": [0, 50, 70, 100],
+              "range": ["#CA8E82", "#D9B99F", "#7A958F", "#7A958F"]
+            },
+            "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+          },
+  
+          "tooltip": [
+            { "field": "att_start", "type": "quantitative", "title": "Jelenlét (tól)", "format": ".1f" },
+            { "field": "att_end", "type": "quantitative", "title": "Jelenlét (ig)", "format": ".1f" },
+            { "field": "study_start", "type": "quantitative", "title": "Tanulás (tól)", "format": ".1f" },
+            { "field": "study_end", "type": "quantitative", "title": "Tanulás (ig)", "format": ".1f" },
+            { "field": "n", "type": "quantitative", "title": "Hallgatók száma" },
+            { "field": "avg_score", "type": "quantitative", "title": "Átlag pontszám", "format": ".1f" }
+          ]
+        }
+      }
+    ],
+  
+    "width": 760,
+    "height": 360
+  }
+  

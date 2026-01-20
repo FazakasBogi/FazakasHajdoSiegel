@@ -1,0 +1,103 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#F2E7DD",
+    "data": { "url": "Exam_Score_Prediction.csv", "format": { "type": "csv" } },
+  
+    "params": [
+      { "name": "difficulty", "value": "All" },
+      { "name": "showTrend", "value": true }
+    ],
+  
+    "transform": [
+      {
+        "filter": "isValid(datum.sleep_hours) && isValid(datum.exam_score) && isValid(datum.sleep_quality)"
+      },
+      { "filter": "difficulty === 'All' || datum.exam_difficulty === difficulty" }
+    ],
+  
+    "layer": [
+      {
+        "mark": { "type": "circle", "opacity": 1, "size": 22 },
+        "encoding": {
+          "x": {
+            "field": "sleep_hours",
+            "type": "quantitative",
+            "title": "Alvásórák (óra/éj)",
+            "scale": { "zero": false, "nice": false },
+            "axis": { "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "y": {
+            "field": "exam_score",
+            "type": "quantitative",
+            "title": "Vizsgaeredmény",
+            "scale": { "zero": false, "nice": false },
+            "axis": { "labelFontSize": 11, "titleFontSize": 13 }
+          },
+          "color": {
+            "field": "sleep_quality",
+            "type": "nominal",
+            "title": "Alvás minősége (pontok)",
+            "scale": {
+              "domain": ["poor", "average", "good"],
+              "range": ["#CA8E82", "#D9B99F", "#7A958F"]
+            },
+            "legend": {
+              "orient": "right",
+              "titleFontSize": 12,
+              "labelFontSize": 11,
+              "symbolSize": 80
+            }
+          },
+          "tooltip": [
+            { "field": "exam_difficulty", "type": "nominal", "title": "Nehézség" },
+            { "field": "sleep_hours", "type": "quantitative", "title": "Alvásórák", "format": ".1f" },
+            { "field": "sleep_quality", "type": "nominal", "title": "Alvás minősége" },
+            { "field": "exam_score", "type": "quantitative", "title": "Vizsgaeredmény", "format": ".1f" }
+          ]
+        }
+      },
+  
+      {
+        "transform": [
+          {
+            "loess": "exam_score",
+            "on": "sleep_hours",
+            "groupby": ["sleep_quality"],
+            "bandwidth": 0.4
+          }
+        ],
+        "mark": { "type": "line", "strokeWidth": 4, "opacity": 1 },
+        "encoding": {
+          "x": { "field": "sleep_hours", "type": "quantitative" },
+          "y": { "field": "exam_score", "type": "quantitative" },
+  
+          "color": {
+            "field": "sleep_quality",
+            "type": "nominal",
+            "title": "Trendvonal (alvásminőség)",
+            "scale": {
+              "domain": ["poor", "average", "good"],
+              "range": ["#7A1F1F", "#B26B00", "#0B5A45"]
+            },
+            "legend": {
+              "orient": "right",
+              "titleFontSize": 12,
+              "labelFontSize": 11,
+              "symbolStrokeWidth": 4
+            }
+          },
+  
+          "opacity": {
+            "condition": { "test": "showTrend", "value": 1 },
+            "value": 0
+          }
+        }
+      }
+    ],
+  
+    "resolve": { "scale": { "color": "independent" } },
+  
+    "width": 760,
+    "height": 360
+  }
+  

@@ -1,0 +1,181 @@
+/* Alapvető stílusok */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #F2E7DD 0%, #D9B99F 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header stílusok */
+header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 30px;
+  background: #F2E7DD;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(41, 36, 33, 0.1);
+}
+
+h1 {
+  color: #292421;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: #A75F37;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* Chart konténer stílusok */
+.chart-container {
+  background: #F2E7DD;
+  padding: 40px;
+  margin: 30px 0;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(41, 36, 33, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(41, 36, 33, 0.2);
+}
+
+.chart-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #292421;
+  margin-bottom: 12px;
+  border-left: 5px solid #A75F37;
+  padding-left: 15px;
+}
+
+.chart-description {
+  color: #A75F37;
+  margin-bottom: 25px;
+  padding-left: 20px;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+/* Vizualizáció konténerek */
+#vis1, #vis2, #vis3, #vis4, #vis5{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* Insight box stílusok */
+.insight {
+  background: #f3ddc9;
+  padding: 20px 25px;
+  border-radius: 10px;
+  margin-top: 25px;
+  border-left: 5px solid #7A958F;
+  box-shadow: 0 4px 8px rgba(122, 149, 143, 0.2);
+}
+
+.insight h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #292421;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.insight p {
+  color: #292421;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .chart-container {
+    padding: 25px 15px;
+  }
+
+  .chart-title {
+    font-size: 22px;
+  }
+
+  #vis1, #vis2, #vis3 {
+    overflow-x: auto;
+  }
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  color: #A75F37;
+  font-size: 14px;
+}
+
+
+.controls-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin: 10px 0 14px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.45);
+}
+
+.control-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.control-label{
+  font-weight:600;
+  margin-right: 4px;
+}
+
+.control-group label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.toggle{
+  font-weight:600;
+}
+
+.chart-center{
+  display:flex;
+  justify-content:center;
+}
