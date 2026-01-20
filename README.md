@@ -1,0 +1,2 @@
+# FazakasHajdoSiegel
+Csoportos projekt
